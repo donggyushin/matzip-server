@@ -22,7 +22,7 @@ export const scrapeMatzipDataFromMobilePage = async (
   const matzipLists: MatzipBasicTypeM[] = [];
 
   const $ = cheerio.load(html);
-  $("ul._1l0hl li").map((index, element) => {
+  $("ul._1l0hl li").map((_, element) => {
     const title = $(element).find("span._2EZQu").text();
     if (!title) return;
     const delievery = $(element).find("span._1YOAF").text();
@@ -30,11 +30,10 @@ export const scrapeMatzipDataFromMobilePage = async (
     const detailPageUrl = $(element).find("a.Tx7az").attr("href") || "";
     const category = $(element).find("span._2OOeM").text();
     const hashtags: string[] = [];
-
+    const thumbnailUrls: string[] = [];
     let star = "";
     let visitorReview = "";
     let blogReview = "";
-    const thumbnailUrls: string[] = [];
 
     const infoElement = $(element).find("div._2vj9H span");
     infoElement.map((index, element) => {
@@ -52,14 +51,14 @@ export const scrapeMatzipDataFromMobilePage = async (
     });
 
     const thumbnailElement = $(element).find("ul._2Ca7y li");
-    thumbnailElement.map((index, element) => {
+    thumbnailElement.map((_, element) => {
       const url = $(element).find("img").attr("src") || "";
       thumbnailUrls.push(url);
     });
 
     $(element)
       .find("div._2Fdcp span._1Iweh")
-      .map((index, element) => {
+      .map((_, element) => {
         const hashtag = $(element).text();
         hashtags.push(hashtag);
       });
@@ -99,7 +98,7 @@ export const scrapeMatzipDataBasedOnPage = async (
       return document.querySelector("body")?.innerHTML;
     });
     const $ = cheerio.load(html);
-    $("ul.list_place_col1 li").map((index, element) => {
+    $("ul.list_place_col1 li").map((_, element) => {
       const nameATag = $(element).find("a.name");
       const infoAreaElement = $(element).find("div.info_area");
       const tagsElement = $(element).find("div.tag_area span.item");
@@ -112,7 +111,7 @@ export const scrapeMatzipDataBasedOnPage = async (
       let tags: string[] = [];
       const imageUrl = $(thumbnailElement).attr("src");
 
-      tagsElement.map((index, element) => {
+      tagsElement.map((_, element) => {
         const tag = $(element).text();
         tags.push(tag);
       });
@@ -144,7 +143,7 @@ export const scrapeMatzipDataBasedOnPage = async (
 
 export async function autoScroll(page: Page) {
   await page.evaluate(async () => {
-    await new Promise((resolve, reject) => {
+    await new Promise((resolve, _) => {
       var totalHeight = 0;
       var distance = 150;
       const scrollable_section = document.getElementById(
