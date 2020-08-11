@@ -11,6 +11,7 @@ export interface MatzipBasicTypeM {
   thumbnailUrls: string[];
   detailPageUrl: string;
   category: string;
+  hashtags: string[];
 }
 
 export interface MatzipBasicType {

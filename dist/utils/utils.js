@@ -34,6 +34,7 @@ exports.scrapeMatzipDataFromMobilePage = (page, area1, area2, area3, category) =
         const description = $(element).find("div._39n9k span").text();
         const detailPageUrl = $(element).find("a.Tx7az").attr("href") || "";
         const category = $(element).find("span._2OOeM").text();
+        const hashtags = [];
         let star = "";
         let visitorReview = "";
         let blogReview = "";
@@ -57,6 +58,12 @@ exports.scrapeMatzipDataFromMobilePage = (page, area1, area2, area3, category) =
             const url = $(element).find("img").attr("src") || "";
             thumbnailUrls.push(url);
         });
+        $(element)
+            .find("div._2Fdcp span._1Iweh")
+            .map((index, element) => {
+            const hashtag = $(element).text();
+            hashtags.push(hashtag);
+        });
         const matzip = {
             title,
             category,
@@ -65,6 +72,7 @@ exports.scrapeMatzipDataFromMobilePage = (page, area1, area2, area3, category) =
             star,
             visitorReview,
             blogReview,
+            hashtags,
             thumbnailUrls,
             detailPageUrl: `https://m.place.naver.com${detailPageUrl}`,
         };
