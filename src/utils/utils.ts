@@ -1,7 +1,72 @@
 import { Browser, Page } from "puppeteer";
+import { MatzipBasicType, MatzipBasicTypeM } from "../types/types";
 
-import { MatzipBasicType } from "../types/types";
 import cheerio from "cheerio";
+
+export const scrapeMatzipDataFromMobilePage = async (
+  page: Page,
+  area1: string,
+  area2: string,
+  area3: string,
+  category: string
+): Promise<MatzipBasicTypeM[]> => {
+  const queryString = encodeURI(`${area1}${area2}${area3}${category}`);
+  const endpointUrl = `https://m.place.naver.com/restaurant/list?query=${queryString}`;
+  await page.goto(endpointUrl);
+  await page.waitForSelector("body", { timeout: 10000 });
+  await autoScroll(page);
+  const html: any = await page.evaluate(() => {
+    return document.querySelector("body")?.innerHTML;
+  });
+
+  const matzipLists: MatzipBasicTypeM[] = [];
+
+  const $ = cheerio.load(html);
+  $("ul._1l0hl li").map((index, element) => {
+    const title = $(element).find("span._2EZQu").text();
+    if (!title) return;
+    const delievery = $(element).find("span._1YOAF").text();
+    const description = $(element).find("div._39n9k span").text();
+    let star = "";
+    let visitorReview = "";
+    let blogReview = "";
+    const thumbnailUrls: string[] = [];
+
+    const infoElement = $(element).find("div._2vj9H span");
+    infoElement.map((index, element) => {
+      switch (index) {
+        case 0:
+          star = $(element).text();
+          break;
+        case 1:
+          visitorReview = $(element).text();
+          break;
+        case 2:
+          blogReview = $(element).text();
+          break;
+      }
+    });
+
+    const thumbnailElement = $(element).find("ul._2Ca7y li");
+    thumbnailElement.map((index, element) => {
+      const url = $(element).find("img").attr("src") || "";
+      thumbnailUrls.push(url);
+    });
+
+    const matzip = {
+      title,
+      delievery,
+      description,
+      star,
+      visitorReview,
+      blogReview,
+      thumbnailUrls,
+    };
+    matzipLists.push(matzip);
+  });
+
+  return matzipLists;
+};
 
 export const scrapeMatzipDataBasedOnPage = async (
   page: Page,
@@ -62,3 +127,25 @@ export const scrapeMatzipDataBasedOnPage = async (
     return matzipList;
   }
 };
+
+export async function autoScroll(page: Page) {
+  await page.evaluate(async () => {
+    await new Promise((resolve, reject) => {
+      var totalHeight = 0;
+      var distance = 100;
+      const scrollable_section = document.getElementById(
+        "_list_scroll_container"
+      ) as HTMLElement;
+      var scrollHeight = scrollable_section.scrollHeight;
+      var timer = setInterval(() => {
+        scrollable_section.scrollBy(0, distance);
+        totalHeight += distance;
+
+        if (totalHeight >= scrollHeight) {
+          clearInterval(timer);
+          resolve();
+        }
+      }, 100);
+    });
+  });
+}

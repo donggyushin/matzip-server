@@ -1,7 +1,51 @@
 import { Request, Response } from "express";
+import {
+  scrapeMatzipDataBasedOnPage,
+  scrapeMatzipDataFromMobilePage,
+} from "../utils/utils";
 
 import pupperteer from "puppeteer";
-import { scrapeMatzipDataBasedOnPage } from "../utils/utils";
+
+export const scrapeMatzipDataFromMNaver = async (
+  req: Request,
+  res: Response
+) => {
+  const { area1Name, area2Name, area3Name, category } = req.query;
+  if (!area1Name || !area2Name || !area3Name) {
+    return res.status(404).json({
+      error: "클라이언트로부터 변수를 제대로 전달받지 못하였습니다.",
+    });
+  }
+
+  const area1 = area1Name as string;
+  const area2 = area2Name as string;
+  const area3 = area3Name as string;
+  let categoryString = category as string;
+
+  if (!categoryString) {
+    categoryString = "맛집";
+  }
+
+  try {
+    const browser = await pupperteer.launch({ headless: true });
+    const page = await browser.newPage();
+    const matzipList = await scrapeMatzipDataFromMobilePage(
+      page,
+      area1,
+      area2,
+      area3,
+      categoryString
+    );
+    await browser.close();
+    return res.json({
+      matzipList,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      error: err.message,
+    });
+  }
+};
 
 export const scrapeMatzipDataFromNaver = async (
   req: Request,
@@ -9,9 +53,9 @@ export const scrapeMatzipDataFromNaver = async (
 ) => {
   const { area1Name, area2Name, area3Name, pageNumber } = req.query;
 
-  if (!area1Name || !area2Name || !area3Name) {
+  if (!area1Name || !area2Name || !area3Name || !pageNumber) {
     return res.status(404).json({
-      error: "클라이언트로부터 변수를 제대로 전달받지 못하였습니다. ",
+      error: "클라이언트로부터 변수를 제대로 전달받지 못하였습니다.",
     });
   }
 
