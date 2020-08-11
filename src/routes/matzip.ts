@@ -1,9 +1,6 @@
-import {
-  scrapeMatzipDataFromMNaver,
-  scrapeMatzipDataFromNaver,
-} from "../controllers/matzip";
-
 import express from "express";
+import { scrapeMatzipDataFromMNaver } from "../controllers/matzip";
+
 const router = express.Router();
 
 router.get("", scrapeMatzipDataFromMNaver);
