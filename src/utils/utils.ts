@@ -132,7 +132,7 @@ export async function autoScroll(page: Page) {
   await page.evaluate(async () => {
     await new Promise((resolve, reject) => {
       var totalHeight = 0;
-      var distance = 100;
+      var distance = 150;
       const scrollable_section = document.getElementById(
         "_list_scroll_container"
       ) as HTMLElement;
