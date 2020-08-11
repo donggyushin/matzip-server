@@ -22,7 +22,7 @@ exports.getAddressFromGeoLocation = (req, res) => __awaiter(void 0, void 0, void
     const requestEndpoint = `https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?request=coordsToaddr&coords=${longitude},${latitude}&orders=legalcode,admcode,addr,roadaddr&output=json&${naverApiQueryKey}`;
     if (!longitude || !latitude) {
         return res.status(400).json({
-            error: '클라이언트로부터 변수를 제대로 전달받지 못하였습니다.'
+            error: "클라이언트로부터 변수를 제대로 전달받지 못하였습니다.",
         });
     }
     try {
@@ -35,12 +35,12 @@ exports.getAddressFromGeoLocation = (req, res) => __awaiter(void 0, void 0, void
         return res.json({
             area1Name,
             area2Name,
-            area3Name
+            area3Name,
         });
     }
     catch (error) {
         return res.status(500).json({
-            error: error.message
+            error: error.message,
         });
     }
 });
