@@ -27,6 +27,8 @@ export const scrapeMatzipDataFromMobilePage = async (
     if (!title) return;
     const delievery = $(element).find("span._1YOAF").text();
     const description = $(element).find("div._39n9k span").text();
+    const detailPageUrl = $(element).find("a.Tx7az").attr("href") || "";
+    const category = $(element).find("span._2OOeM").text();
     let star = "";
     let visitorReview = "";
     let blogReview = "";
@@ -53,14 +55,16 @@ export const scrapeMatzipDataFromMobilePage = async (
       thumbnailUrls.push(url);
     });
 
-    const matzip = {
+    const matzip: MatzipBasicTypeM = {
       title,
+      category,
       delievery,
       description,
       star,
       visitorReview,
       blogReview,
       thumbnailUrls,
+      detailPageUrl: `https://m.place.naver.com${detailPageUrl}`,
     };
     matzipLists.push(matzip);
   });

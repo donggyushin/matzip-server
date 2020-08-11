@@ -9,6 +9,8 @@ export interface MatzipBasicTypeM {
   visitorReview: string;
   blogReview: string;
   thumbnailUrls: string[];
+  detailPageUrl: string;
+  category: string;
 }
 
 export interface MatzipBasicType {
