@@ -26,7 +26,7 @@ exports.scrapeMatzipDataFromMobilePage = (page, area1, area2, area3, category) =
     });
     const matzipLists = [];
     const $ = cheerio_1.default.load(html);
-    $("ul._1l0hl li").map((index, element) => {
+    $("ul._1l0hl li").map((_, element) => {
         const title = $(element).find("span._2EZQu").text();
         if (!title)
             return;
@@ -35,10 +35,10 @@ exports.scrapeMatzipDataFromMobilePage = (page, area1, area2, area3, category) =
         const detailPageUrl = $(element).find("a.Tx7az").attr("href") || "";
         const category = $(element).find("span._2OOeM").text();
         const hashtags = [];
+        const thumbnailUrls = [];
         let star = "";
         let visitorReview = "";
         let blogReview = "";
-        const thumbnailUrls = [];
         const infoElement = $(element).find("div._2vj9H span");
         infoElement.map((index, element) => {
             switch (index) {
@@ -54,13 +54,13 @@ exports.scrapeMatzipDataFromMobilePage = (page, area1, area2, area3, category) =
             }
         });
         const thumbnailElement = $(element).find("ul._2Ca7y li");
-        thumbnailElement.map((index, element) => {
+        thumbnailElement.map((_, element) => {
             const url = $(element).find("img").attr("src") || "";
             thumbnailUrls.push(url);
         });
         $(element)
             .find("div._2Fdcp span._1Iweh")
-            .map((index, element) => {
+            .map((_, element) => {
             const hashtag = $(element).text();
             hashtags.push(hashtag);
         });
@@ -92,7 +92,7 @@ exports.scrapeMatzipDataBasedOnPage = (page, pageNumber, area1Name, area2Name, a
             return (_a = document.querySelector("body")) === null || _a === void 0 ? void 0 : _a.innerHTML;
         });
         const $ = cheerio_1.default.load(html);
-        $("ul.list_place_col1 li").map((index, element) => {
+        $("ul.list_place_col1 li").map((_, element) => {
             const nameATag = $(element).find("a.name");
             const infoAreaElement = $(element).find("div.info_area");
             const tagsElement = $(element).find("div.tag_area span.item");
@@ -104,7 +104,7 @@ exports.scrapeMatzipDataBasedOnPage = (page, pageNumber, area1Name, area2Name, a
             let price = "";
             let tags = [];
             const imageUrl = $(thumbnailElement).attr("src");
-            tagsElement.map((index, element) => {
+            tagsElement.map((_, element) => {
                 const tag = $(element).text();
                 tags.push(tag);
             });
@@ -135,7 +135,7 @@ exports.scrapeMatzipDataBasedOnPage = (page, pageNumber, area1Name, area2Name, a
 function autoScroll(page) {
     return __awaiter(this, void 0, void 0, function* () {
         yield page.evaluate(() => __awaiter(this, void 0, void 0, function* () {
-            yield new Promise((resolve, reject) => {
+            yield new Promise((resolve, _) => {
                 var totalHeight = 0;
                 var distance = 150;
                 const scrollable_section = document.getElementById("_list_scroll_container");
