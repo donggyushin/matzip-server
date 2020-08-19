@@ -12,9 +12,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.scrapeMatzipDataFromNaver = exports.scrapeMatzipDataFromMNaver = void 0;
+exports.scrapeMatzipDataFromNaver = exports.scrapeMatzipDataFromMNaver = exports.scrapeMatzipDetailDataFromMNaver = void 0;
 const utils_1 = require("../utils/utils");
+const cheerio_1 = __importDefault(require("cheerio"));
 const puppeteer_1 = __importDefault(require("puppeteer"));
+exports.scrapeMatzipDetailDataFromMNaver = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { url } = req.query;
+    if (!url) {
+        return res.status(404).json({
+            error: "클라이언트로부터 변수를 제대로 전달받지 못하였습니다.",
+        });
+    }
+    const urlString = url;
+    const browser = yield puppeteer_1.default.launch({ headless: true });
+    const page = yield browser.newPage();
+    yield page.goto(urlString);
+    const html = yield page.content();
+    console.log(html);
+    const $ = cheerio_1.default.load(html);
+});
 exports.scrapeMatzipDataFromMNaver = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { area1Name, area2Name, area3Name, category } = req.query;
     if (!area1Name || !area2Name || !area3Name) {

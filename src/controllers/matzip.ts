@@ -1,10 +1,37 @@
+import { MatzipDetailDataTypeM, MenuType } from "../types/types";
 import { Request, Response } from "express";
 import {
   scrapeMatzipDataBasedOnPage,
   scrapeMatzipDataFromMobilePage,
+  scrapeMatzipDetailDataFromMobilePage,
 } from "../utils/utils";
 
+import cheerio from "cheerio";
 import pupperteer from "puppeteer";
+
+export const scrapeMatzipDetailDataFromMNaver = async (
+  req: Request,
+  res: Response
+) => {
+  const { url } = req.query;
+  if (!url) {
+    return res.status(404).json({
+      error: "클라이언트로부터 변수를 제대로 전달받지 못하였습니다.",
+    });
+  }
+
+  const urlString = url as string;
+
+  const browser = await pupperteer.launch({ headless: true });
+  const page = await browser.newPage();
+
+  const matzipDetailData = await scrapeMatzipDetailDataFromMobilePage(
+    page,
+    urlString
+  );
+  browser.close();
+  return res.json(matzipDetailData);
+};
 
 export const scrapeMatzipDataFromMNaver = async (
   req: Request,
