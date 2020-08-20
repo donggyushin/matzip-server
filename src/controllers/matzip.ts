@@ -55,7 +55,7 @@ export const scrapeMatzipDataFromMNaver = async (
 
   try {
     const browser = await pupperteer.launch({
-      headless: true,
+      headless: false,
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
       ignoreDefaultArgs: ["--disable-extensions"],
     });
