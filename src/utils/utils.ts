@@ -147,7 +147,7 @@ export const scrapeMatzipDataFromMobilePage = async (
   area3: string,
   category: string
 ): Promise<MatzipBasicTypeM[]> => {
-  const queryString = encodeURI(`${area1}${area2}${area3}${category}`);
+  const queryString = encodeURI(`${area1} ${area2} ${area3} ${category}`);
   const endpointUrl = `https://m.place.naver.com/restaurant/list?query=${queryString}`;
   await page.goto(endpointUrl);
   await page.waitForSelector("body", { timeout: 10000 });
