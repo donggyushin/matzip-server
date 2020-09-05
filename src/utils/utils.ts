@@ -71,7 +71,11 @@ export const scrapeMatzipDetailDataFromMobilePage = async (
   });
 
   matzipDetailData.phoneString = $("a._3HEBM").attr("href");
-  matzipDetailData.address1 = $("div._1h3B_ span._2yqUQ").text();
+  $("div._1h3B_ span._2yqUQ").map((index, element) => {
+    if (index === 0) {
+      matzipDetailData.address1 = $(element).text();
+    }
+  });
   matzipDetailData.address2 = $("div._2P6sT").text();
   matzipDetailData.workTime = $("div._2ZP3j").text();
   matzipDetailData.siteUrl = $("a._1RUzg").attr("href");
