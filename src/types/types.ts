@@ -34,7 +34,7 @@ export interface MatzipDetailDataTypeM {
   phoneString?: string;
   address1: string;
   address2: string;
-  workTime: string;
+  workTime: string[];
   siteUrl?: string;
   menus: MenuType[];
   visitorsPhotos: string[];

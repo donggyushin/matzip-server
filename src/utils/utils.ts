@@ -33,7 +33,7 @@ export const scrapeMatzipDetailDataFromMobilePage = async (
     phoneString: "",
     address1: "",
     address2: "",
-    workTime: "",
+    workTime: [],
     siteUrl: "",
     menus: [],
     visitorsPhotos: [],
@@ -77,7 +77,11 @@ export const scrapeMatzipDetailDataFromMobilePage = async (
     }
   });
   matzipDetailData.address2 = $("div._2P6sT").text();
-  matzipDetailData.workTime = $("div._2ZP3j").text();
+  $("div._2ZP3j").map((_, element) => {
+    const worktime = $(element).find("span").text();
+    matzipDetailData.workTime.push(worktime);
+  });
+
   matzipDetailData.siteUrl = $("a._1RUzg").attr("href");
   $("div.place_section ul._2ohjP li").map((index, element) => {
     const menu: MenuType = {
