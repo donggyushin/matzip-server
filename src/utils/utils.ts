@@ -82,6 +82,10 @@ export const scrapeMatzipDetailDataFromMobilePage = async (
     matzipDetailData.workTime.push(worktime);
   });
 
+  if (matzipDetailData.workTime[0] === "") {
+    matzipDetailData.workTime = [];
+  }
+
   matzipDetailData.siteUrl = $("a._1RUzg").attr("href");
   $("div.place_section ul._2ohjP li").map((index, element) => {
     const menu: MenuType = {
