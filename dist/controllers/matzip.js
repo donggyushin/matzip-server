@@ -14,7 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.scrapeMatzipDataFromNaver = exports.scrapeMatzipDataFromMNaver = exports.scrapeMatzipDetailDataFromMNaver = void 0;
 const utils_1 = require("../utils/utils");
-const cheerio_1 = __importDefault(require("cheerio"));
 const puppeteer_1 = __importDefault(require("puppeteer"));
 exports.scrapeMatzipDetailDataFromMNaver = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { url } = req.query;
@@ -26,10 +25,9 @@ exports.scrapeMatzipDetailDataFromMNaver = (req, res) => __awaiter(void 0, void 
     const urlString = url;
     const browser = yield puppeteer_1.default.launch({ headless: true });
     const page = yield browser.newPage();
-    yield page.goto(urlString);
-    const html = yield page.content();
-    console.log(html);
-    const $ = cheerio_1.default.load(html);
+    const matzipDetailData = yield utils_1.scrapeMatzipDetailDataFromMobilePage(page, urlString);
+    browser.close();
+    return res.json(matzipDetailData);
 });
 exports.scrapeMatzipDataFromMNaver = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { area1Name, area2Name, area3Name, category } = req.query;
@@ -46,7 +44,11 @@ exports.scrapeMatzipDataFromMNaver = (req, res) => __awaiter(void 0, void 0, voi
         categoryString = "맛집";
     }
     try {
-        const browser = yield puppeteer_1.default.launch({ headless: true });
+        const browser = yield puppeteer_1.default.launch({
+            headless: true,
+            args: ["--no-sandbox", "--disable-setuid-sandbox"],
+            ignoreDefaultArgs: ["--disable-extensions"],
+        });
         const page = yield browser.newPage();
         const matzipList = yield utils_1.scrapeMatzipDataFromMobilePage(page, area1, area2, area3, categoryString);
         yield browser.close();

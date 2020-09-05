@@ -43,12 +43,16 @@ export const scrapeMatzipDetailDataFromMobilePage = async (
   };
 
   $("div._3eHVS a.place_thumb").map((index, element) => {
-    const thumbnailImage = $(element).find("img").attr("src");
-    if (thumbnailImage) {
-      matzipDetailData.thumbnails.push(thumbnailImage);
+    const div = $(element).find("div");
+    const styleString = div.attr("style");
+    if (styleString) {
+      const thumbnailImage = styleString.substr(44, styleString.length - 45);
+      if (thumbnailImage) {
+        matzipDetailData.thumbnails.push(thumbnailImage);
+      }
     }
   });
-  $("a#_title span").map((index, element) => {
+  $("span#_title span").map((index, element) => {
     const title = $(element).text();
     if (index === 0) {
       matzipDetailData.title1 = title;
