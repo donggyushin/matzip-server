@@ -193,8 +193,12 @@ export const scrapeMatzipDataFromMobilePage = async (
 
     const thumbnailElement = $(element).find("ul._2Ca7y li");
     thumbnailElement.map((_, element) => {
-      const url = $(element).find("img").attr("src") || "";
-      thumbnailUrls.push(url);
+      const imageDiv = $(element).find("a div");
+      const styleString = imageDiv.attr("style");
+      if (styleString) {
+        const url = styleString.substr(50, styleString.length - 53);
+        thumbnailUrls.push(url);
+      }
     });
 
     $(element)
