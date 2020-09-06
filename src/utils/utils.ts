@@ -112,7 +112,7 @@ export const scrapeMatzipDetailDataFromMobilePage = async (
 
   const menuUrl = $("div._2kAri a").attr("href");
   if (menuUrl) {
-    matzipDetailData.menuUrl = menuUrl;
+    matzipDetailData.menuUrl = `https://m.place.naver.com${menuUrl}`;
   }
 
   $("ul._3TiO6 li").map((index, element) => {
