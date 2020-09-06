@@ -36,6 +36,7 @@ export const scrapeMatzipDetailDataFromMobilePage = async (
     workTime: [],
     siteUrl: "",
     menus: [],
+    menuUrl: "",
     visitorsPhotos: [],
     visitorReviews: [],
     blogReviews: [],
@@ -108,6 +109,12 @@ export const scrapeMatzipDetailDataFromMobilePage = async (
     };
     matzipDetailData.menus.push(menu);
   });
+
+  const menuUrl = $("div._2kAri a").attr("href");
+  if (menuUrl) {
+    matzipDetailData.menuUrl = menuUrl;
+  }
+
   $("ul._3TiO6 li").map((index, element) => {
     const imageurl = $(element).find("img").attr("src");
     if (imageurl) {

@@ -37,6 +37,7 @@ export interface MatzipDetailDataTypeM {
   workTime: string[];
   siteUrl?: string;
   menus: MenuType[];
+  menuUrl: string;
   visitorsPhotos: string[];
   visitorReviews: VisitorReviewType[];
   blogReviews: BlogReviewType[];
