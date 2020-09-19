@@ -36,6 +36,6 @@
     "start": "NODE_ENV=production node dist/index.js &",
     "dev": "NODE_ENV=development nodemon src/index.ts",
     "build": "tsc -p .",
-    "start2": "NODE_ENV=production node src/index.ts &"
+    "start2": "NODE_ENV=production nodemon src/index.ts &"
   }
 }
