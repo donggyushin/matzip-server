@@ -60,16 +60,16 @@ export const scrapeMatzipDataFromMNaver = async (
       ignoreDefaultArgs: ["--disable-extensions"],
     });
     const page = await browser.newPage();
-    // const matzipList = await scrapeMatzipDataFromMobilePage(
-    //   page,
-    //   area1,
-    //   area2,
-    //   area3,
-    //   categoryString
-    // );
+    const matzipList = await scrapeMatzipDataFromMobilePage(
+      page,
+      area1,
+      area2,
+      area3,
+      categoryString
+    );
     await browser.close();
     return res.json({
-      matzipList: [],
+      matzipList,
     });
   } catch (err) {
     return res.status(500).json({
